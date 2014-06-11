@@ -14,7 +14,6 @@ end
 
 set = Hash.new{}
 
-
 # get '/sets' do
 # 	session[:history] ||=[]
 # 	params[:setname]
@@ -25,7 +24,7 @@ set = Hash.new{}
 # end
 
 get '/' do
-	session[:history] ||= []
+	session[:history] ||= {}
 	erb :index, :locals => {:history => session[:history]}
 end
 
@@ -44,9 +43,9 @@ post '/sets' do
 end
 
 get '/sets' do
-	session[:history] ||= []
+	session[:history] ||= {}
 
-	erb :"index.html", :locals => {:history => session[:history]}
+	erb :sets, :locals => {:history => session[:history]}
 end
 
 # get '/sets/previous' do
