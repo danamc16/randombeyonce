@@ -39,8 +39,7 @@ post '/sets' do
 		#pushes description to the end of vidlist
 			
 	end
-	erb :sets, :locals => {:history => session[:history],
-							:set => set}
+	erb :sets, :locals => {:history => session[:history]}
 end
 
 get '/sets' do
