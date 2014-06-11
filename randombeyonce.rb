@@ -27,18 +27,19 @@ set = Hash.new{}
 
 get '/' do
 	session[:history] ||= []
-	result = videos[rand(0...videos.length)]
-
-	erb :index, :locals => {:result => result}
+	erb :index, :locals => {:history => session[:history]}
 end
 
 
 post '/sets' do
-	session[:history] ||= []
+	session[:history] ||= {}
 	vidlist = params[:vids].split(", ")
+	#vidlist is the array of videos
 	if params[:submit] == "submit"
 		session[:history].store(params[:setname] => vidlist.push(params[:description]))
-			rand(0..(vidlist.length-1))
+		#creates a hash that maps setname to the array vidlist
+		#pushes description to the end of vidlist
+			
 	end
 	erb :sets, :locals => {:history => session[:history]}
 end
