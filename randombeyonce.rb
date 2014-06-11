@@ -5,6 +5,7 @@ configure do
 	enable :sessions
 end
 
+sets = Hash.new
 # sets => {
 # 	"SETNAME" => {
 # 		"name" => "SETNAME", "vidnums" =>
