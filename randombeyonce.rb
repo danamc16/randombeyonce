@@ -15,7 +15,6 @@ end
 set = Hash.new{}
 
 
-
 # get '/sets' do
 # 	session[:history] ||=[]
 # 	params[:setname]
