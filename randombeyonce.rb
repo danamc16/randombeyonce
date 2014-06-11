@@ -25,6 +25,14 @@ set = Hash.new{}
 # 	erb :sets, :locals => {:history => session[:history]}
 # end
 
+get '/' do
+	session[:history] ||= []
+	result = videos[rand(0...videos.length)]
+
+	erb :index, :locals => {:result => result}
+end
+
+
 post '/sets' do
 	session[:history] ||= []
 	vidlist = params[:vids].split(", ")
@@ -40,9 +48,6 @@ get '/sets' do
 
 	erb :"index.html", :locals => {:history => session[:history]}
 end
-
-# get '/' do
-# 	session[:history]
 
 # get '/sets/previous' do
 # 	result_name = session[:setname]
