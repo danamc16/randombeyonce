@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<div class="form">
-		<form>
+		<form method="post" action="/sets">
 			<fieldset>
 				<ul>
 				<label>
@@ -56,13 +56,26 @@
 				</label></ul>
 				<ul>
 				<label>
-					<input type="submit" name="submit"></label></ul>
+					<input type="submit" name="button" class="button" value="Submit"></label></ul>
 			</fieldset>
 		</form>
 	</div>
 		<center>
 	<div class="table">
-		<%= session[:history] %>
+		 <% session[:history].each do |key,value| %>
+		 	<tr>
+		 		<td><%= key %></td>
+		 		<td><%= value[value.length] %></td>
+		 		<td><% value.each do |vid| %>
+		 				<% unless vid == value.length-1%>
+		 					<img class="thumbnail" src="http://img.youtube.com/vi/<%= vid %>/default.jpg">
+		 				<% else %>
+		 					<% exit %>
+		 				<% end %>
+		 			<% end %>
+		 		</td>
+		 	</tr>
+		 	<% end %>		
 	</div>
 	</center>	
 </body>

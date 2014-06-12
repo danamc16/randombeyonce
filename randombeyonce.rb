@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pry'
 
 configure do
 	enable :sessions
@@ -28,25 +29,27 @@ get '/' do
 	erb :index, :locals => {:history => session[:history]}
 end
 
+get '/sets' do
+	session[:history] ||= {}
+	erb :sets, :locals => {:history => session[:history]}
+end
+
 
 post '/sets' do
-	session[:history] ||= {}
 	vidlist = params[:vids].split(", ")
 	#vidlist is the array of videos
-	if params[:submit] == "submit"
-		session[:history].store(params[:setname] => vidlist.push(params[:description]))
+	if params[:button] == "Submit"
+		combined = vidlist.push(params[:description])
+		session[:history][params[:setname]] = combined
+		binding.pry
 		#creates a hash that maps setname to the array vidlist
 		#pushes description to the end of vidlist
 			
 	end
+	#binding.pry
 	erb :sets, :locals => {:history => session[:history]}
 end
 
-get '/sets' do
-	session[:history] ||= {}
-
-	erb :sets, :locals => {:history => session[:history]}
-end
 
 # get '/sets/previous' do
 # 	result_name = session[:setname]
