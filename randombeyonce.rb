@@ -41,7 +41,6 @@ post '/sets' do
 	if params[:button] == "Submit"
 		combined = vidlist.push(params[:description])
 		session[:history][params[:setname]] = combined
-		binding.pry
 		#creates a hash that maps setname to the array vidlist
 		#pushes description to the end of vidlist
 			
@@ -50,6 +49,13 @@ post '/sets' do
 	erb :sets, :locals => {:history => session[:history]}
 end
 
+get '/setname' do
+	if params[:button] == :key
+	curset = session[:history][:key]
+	result = rand(0...[curset.length-1])
+	end
+	erb :index, :result, :locals => {:result => result, :history => session[:history]}
+end
 
 # get '/sets/previous' do
 # 	result_name = session[:setname]
