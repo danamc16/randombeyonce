@@ -69,8 +69,8 @@
 					<input type="submit" name="button" class="button" value="<%= key %>"></form></td>
 		 		<td><%= value[value.length] %></td>
 		 		<td><% value.each do |vid| %>
-		 				<% if vid == value.length-1%>
-		 				<%= vid[value.length-1]%>
+		 				<% if vid == value.length-2%>
+		 				<%= vid[value.length-2]%>
 		 				<% else %>
 		 					<img class="thumbnail" src="http://img.youtube.com/vi/<%= vid %>/default.jpg">
 		 				<% end %>

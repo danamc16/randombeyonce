@@ -1,0 +1,13 @@
+ <% set.each do |key,value| %>
+		 	<tr>
+		 		<td><%= key %></td>
+		 		<td><% value.each do |vid| %>
+		 				<% unless vid == value.length-1%>
+		 					<img class="thumbnail" src="http://img.youtube.com/vi/<%= vid %>/default.jpg">
+		 				<% else %>
+		 					<% exit %>
+		 				<% end %>
+		 			<% end %>
+		 		</td>
+		 	</tr>
+		 	<% end %>		

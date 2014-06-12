@@ -27,24 +27,20 @@ set = Hash.new{}
 get '/' do
 	session[:history] ||= {}
 	result = "bpOSxM0rNPM"
-	erb :index, :locals => {:history => session[:history],
-							:result => result}
+	erb :index, :locals => {:history => session[:history], :result => result}
 end
 
 get '/sets' do
 	session[:history] ||= {}
 	if session[:history].keys.include?(params[:button])
 		title = params[:button]
-		insides = Array.new
-		session[:history][params[:button]]
-		binding.pry
+		insides = Marshal.load(Marshal.dump(session[:history][params[:button]]))
 		insides.pop
-		binding.pry
 		result = insides[rand(0..(insides.length-1))]
 		binding.pry
-		redirect('/sets/' + title)
+		redirect to('/sets/' + title),:result
 	end
-	erb :sets, :locals => {:history => session[:history]}
+	erb :sets, :locals => {:history => session[:history],:result => result}
 end
 
 
@@ -60,11 +56,12 @@ post '/sets' do
 
 
 	#binding.pry
-	erb :sets, :locals => {:result => result, :history => session[:history]}
+	erb :sets, :locals => {:history => session[:history]}
 end
 
 get '/sets/:title' do
-	erb :setname, :locals => {:title => params[:title], :history => session[:history]}
+	erb :setname, :locals => {:result => params[:result], :title => params[:title], :history => session[:history]}
+	binding.pry
 end
 
 
