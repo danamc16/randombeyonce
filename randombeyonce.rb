@@ -33,6 +33,15 @@ end
 
 get '/sets' do
 	session[:history] ||= {}
+	if session[:history].keys.include?(params[:button])
+		return "button pressed!"
+		binding.pry
+		curset = session[:history][:key]
+		binding.pry
+		result = rand(0...[curset.length-1])
+		binding.pry
+		redirect_to('/sets/' + :key.to_s)
+	end
 	erb :sets, :locals => {:history => session[:history]}
 end
 
@@ -47,14 +56,7 @@ post '/sets' do
 		#pushes description to the end of vidlist
 	end
 
-	if params[:button] == :key
-		binding.pry
-		curset = session[:history][:key]
-		binding.pry
-		result = rand(0...[curset.length-1])
-		binding.pry
-		redirect_to('/sets/' + :key.to_s)
-	end
+
 	#binding.pry
 	erb :sets, :locals => {:result => result, :history => session[:history]}
 end
