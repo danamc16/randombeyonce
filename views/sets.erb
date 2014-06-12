@@ -56,15 +56,16 @@
 				</label></ul>
 				<ul>
 				<label>
-					<input type="submit" name="button" class="button" value="Submit"></label></ul>
+					<input type="submit" name="button" class="buttonß" value="Submit"></label></ul>
 			</fieldset>
 		</form>
 	</div>
 		<center>
 	<div class="table">
+		<table>
 		 <% session[:history].each do |key,value| %>
 		 	<tr>
-		 		<td><label>
+		 		<td><label method="post" action="/sets">
 					<input type="submit" name="button" class="button" value="<%= key %>"></label></td>
 		 		<td><%= value[value.length] %></td>
 		 		<td><% value.each do |vid| %>
@@ -76,7 +77,8 @@
 		 			<% end %>
 		 		</td>
 		 	</tr>
-		 	<% end %>		
+		 	<% end %>	
+		 </table>	
 	</div>
 	</center>	
 </body>
