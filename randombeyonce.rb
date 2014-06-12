@@ -34,13 +34,15 @@ end
 get '/sets' do
 	session[:history] ||= {}
 	if session[:history].keys.include?(params[:button])
-		return "button pressed!"
+		title = params[:button]
+		insides = Array.new
+		session[:history][params[:button]]
 		binding.pry
-		curset = session[:history][:key]
+		insides.pop
 		binding.pry
-		result = rand(0...[curset.length-1])
+		result = insides[rand(0..(insides.length-1))]
 		binding.pry
-		redirect_to('/sets/' + :key.to_s)
+		redirect('/sets/' + title)
 	end
 	erb :sets, :locals => {:history => session[:history]}
 end
@@ -61,27 +63,9 @@ post '/sets' do
 	erb :sets, :locals => {:result => result, :history => session[:history]}
 end
 
-get '/sets/' + :key.to_s do
-	erb :setname, :locals => {:result => result, :history => session[:history]}
+get '/sets/:title' do
+	erb :setname, :locals => {:title => params[:title], :history => session[:history]}
 end
-
-# get '/sets/previous' do
-# 	result_name = session[:setname]
-# 	result_vids = session[:vids]
-# 	result_description = session[:description]
-
-
-# 	erb :previous, :locals => {:result_name => result_name,
-# 								:result_vids => result_vids,
-# 								:result_description => result_description}
-# end
-
-
-# post '/sets' do
-
-# 	sets[] = params['SETNAME']
-
-# end
 
 
 # HTTP Verb | URL | Controller | Action | used for | Must create View?
