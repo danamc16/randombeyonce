@@ -26,7 +26,9 @@ set = Hash.new{}
 
 get '/' do
 	session[:history] ||= {}
-	erb :index, :locals => {:history => session[:history]}
+	result = "bpOSxM0rNPM"
+	erb :index, :locals => {:history => session[:history],
+							:result => result}
 end
 
 get '/sets' do
