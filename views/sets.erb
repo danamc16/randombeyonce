@@ -65,8 +65,8 @@
 		<table>
 		 <% session[:history].each do |key,value| %>
 		 	<tr>
-		 		<td><label method="post" action="/sets">
-					<input type="submit" name="button" class="button" value="<%= key %>"></label></td>
+		 		<td><form method="get" action="/sets">
+					<input type="submit" name="button" class="button" value="<%= key %>"></form></td>
 		 		<td><%= value[value.length] %></td>
 		 		<td><% value.each do |vid| %>
 		 				<% if vid == value.length-1%>
