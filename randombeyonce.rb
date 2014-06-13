@@ -34,13 +34,9 @@ get '/sets' do
 	session[:history] ||= {}
 	if session[:history].keys.include?(params[:button])
 		title = params[:button]
-		insides = Marshal.load(Marshal.dump(session[:history][params[:button]]))
-		insides.pop
-		result = insides[rand(0..(insides.length-1))]
-		binding.pry
-		redirect to('/sets/' + title),:result
+		redirect to('/sets/' + title)
 	end
-	erb :sets, :locals => {:history => session[:history],:result => result}
+	erb :sets, :locals => {:history => session[:history]}
 end
 
 
@@ -60,8 +56,10 @@ post '/sets' do
 end
 
 get '/sets/:title' do
-	erb :setname, :locals => {:result => params[:result], :title => params[:title], :history => session[:history]}
-	binding.pry
+	insides = Marshal.load(Marshal.dump(session[:history][params[:title]]))
+	insides.pop
+	result = insides[rand(0..(insides.length-1))]
+	erb :setname, :locals => {:result => result,:title => params[:title], :history => session[:history]}
 end
 
 
