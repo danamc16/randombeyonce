@@ -13,36 +13,43 @@ use Rack::MethodOverride
 
 set = Hash.new{}
 
-get '/' do
+before do
 	session[:history] ||= {}
-	result = "bpOSxM0rNPM"
-	erb :index, :locals => {:history => session[:history], :result => result}
+end
+
+helpers do
+	def history
+		session[:history]
+	end 
+end
+
+get '/' do
+	erb :index
 end
 
 get '/sets' do
-	session[:history] ||= {}
-	if session[:history].keys.include?(params[:button])
+	if history.keys.include?(params[:button])
 		title = params[:button]
 		redirect to('/sets/' + title)
 	end
-	erb :sets, :locals => {:history => session[:history]}
+
+	erb :sets, :locals => {:history => history}
 end
 
 
 post '/sets' do
-	session[:history] ||= {}
 	vidlist = params[:vids].split(", ")
 	if params[:button] == "Submit"
 		combined = vidlist.push(params[:description])
-		session[:history][params[:setname]] = combined
+		history[params[:setname]] = combined
 	end
 
-	erb :sets, :locals => {:history => session[:history]}
+	erb :sets, :locals => {:history => history}
 end
 
 get '/sets/:title' do
 	
-	insides = Marshal.load(Marshal.dump(session[:history][params[:title]]))
+	insides = Marshal.load(Marshal.dump(history[params[:title]]))
 	insides.pop
 	insides.shuffle!
 
@@ -59,20 +66,17 @@ get '/sets/:title' do
         end
 	end
 
-	first = @first_vid
-    rest = @rest_of_vids
-
-	vid_playlist = '<iframe width="750" height="500" src="https://www.youtube.com/v/' + @first_vid + '?version=3&loop=1&playlist=' + @rest_of_vids + '" frameborder="0" allowfullscreen></iframe>'
+	vid_playlist = '<iframe width="1000" height="563i" src="https://www.youtube.com/v/' + @first_vid + '?version=3&loop=1&playlist=' + @rest_of_vids + '" frameborder="0" allowfullscreen></iframe>'
 
 	title = params[:title]
 
-	erb :setname, :locals => {:first => first, :rest => rest,:vid_playlist => vid_playlist,:title => params[:title], :history => session[:history]}
+	erb :setname, :locals => {:first => @first_vid, :rest => @rest_of_vids,:vid_playlist => vid_playlist,:title => params[:title], :history => history}
 end
 
 get '/sets/:title/edit' do
 	title = params[:title]
-	description = session[:history][title][(session[:history][title].length)-1]
-	vidlist = Marshal.load(Marshal.dump(session[:history][title]))
+	description = history[title][(history[title].length)-1]
+	vidlist = Marshal.load(Marshal.dump(history[title]))
 	vidlist.pop
 	string = ""
 	vidlist.each do |vid|
@@ -90,10 +94,10 @@ put '/sets/:title/edit' do
 
 	title = params[:title]
 	title_new = params[:title_new]
-	session[:history][title_new] = session[:history].delete(title)
+	history[title_new] = history.delete(title)
 	description = params[:description]
 	vidlist = params[:vidlist].split(', ')
-	session[:history][title_new].replace(vidlist.push(description))
+	history[title_new].replace(vidlist.push(description))
 	redirect to('/sets/' + title_new)
 	
 	erb :edit, :locals => {:title => params[:title],:title_new => params[:title_new],:description => params[:description],:vidlist => params[:vidlist]}
@@ -101,7 +105,7 @@ end
 
 delete '/sets/:title' do
 	title = params[:title]
-	session[:history].delete(title)
+	history.delete(title)
 	redirect to('/sets')
 	erb :setname, :locals => {:title => title}
 end
