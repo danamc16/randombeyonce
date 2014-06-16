@@ -4,25 +4,14 @@ require 'pry'
 
 configure do
 	enable :sessions
+	_method = true
 end
 
-# sets => {
-# 	"SETNAME" => {
-# 		"name" => "SETNAME", "vidnums" =>
-# 		["lLJf9qJHR3E","RB-RcX5DS5A"]
-# 	}
-# }
+use Rack::MethodOverride
+
+# 	edgLwyMS4tk, eiDTgnFnuMI, Lt9_1rGHxF4, WjxL5crGUcw
 
 set = Hash.new{}
-
-# get '/sets' do
-# 	session[:history] ||=[]
-# 	params[:setname]
-#  	params[:vids]
-# 	params[:description]
-
-# 	erb :sets, :locals => {:history => session[:history]}
-# end
 
 get '/' do
 	session[:history] ||= {}
@@ -42,26 +31,70 @@ end
 
 post '/sets' do
 	vidlist = params[:vids].split(", ")
-	#vidlist is the array of videos
 	if params[:button] == "Submit"
 		combined = vidlist.push(params[:description])
 		session[:history][params[:setname]] = combined
-		#creates a hash that maps setname to the array vidlist
-		#pushes description to the end of vidlist
 	end
 
-
-	#binding.pry
 	erb :sets, :locals => {:history => session[:history]}
 end
 
 get '/sets/:title' do
+	
 	insides = Marshal.load(Marshal.dump(session[:history][params[:title]]))
 	insides.pop
-	result = insides[rand(0..(insides.length-1))]
-	erb :setname, :locals => {:result => result,:title => params[:title], :history => session[:history]}
+	insides.shuffle
+
+	@first_vid = ''
+	@rest_of_vids = ''
+
+	insides.each do |video|
+		if video == insides[0]
+            @first_vid = video
+        elsif video != insides[insides.length-1]
+            @rest_of_vids << video + ','
+        else
+            @rest_of_vids << video
+        end
+	end
+
+	first = @first_vid
+    rest = @rest_of_vids
+
+	vid_playlist = '<iframe width="750" height="500" src="https://www.youtube.com/v/' + @first_vid + '?version=3&loop=1&playlist=' + @rest_of_vids + '" frameborder="0" allowfullscreen></iframe>'
+
+	title = params[:title]
+
+	erb :setname, :locals => {:first => first, :rest => rest,:vid_playlist => vid_playlist,:title => params[:title], :history => session[:history]}
 end
 
+get '/sets/:title/edit' do
+	title = params[:title]
+	description = session[:history][title][(session[:history][title].length)-1]
+	vidlist = Marshal.load(Marshal.dump(session[:history][title]))
+	vidlist.pop
+	vidlist.join(', ')
+	binding.pry
+
+	erb :edit, :locals => {:title => title, :description => description,:vidlist => vidlist}
+end
+
+put '/sets/:title/edit' do
+	title = params[:title]
+	description = params[:description]
+	vidlist = params[:vidlist]
+	erb :edit, :locals => {:title => title,:description => description,:vidlist => vidlist}
+end
+
+delete '/sets/:title' do
+	title = params[:title]
+	session[:history].delete(title)
+	redirect to('/sets')
+	erb :setname, :locals => {:title => title}
+end
+
+
+	
 
 # HTTP Verb | URL | Controller | Action | used for | Must create View?
 # --- | --- | --- | --- | --- | ---

@@ -1,0 +1,47 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<link 
+<body>
+	<div class="navbar">
+		<div id="title">
+		back to the start.
+		</div>
+		<div id="subnavbar">
+			<div id="home">
+				<a href="/">
+					Home
+				</a>
+			</div>
+			<a href="/about">
+				<div id="about">
+						About
+				</div>
+				</a>
+			<div id="sets">
+				<a href="/sets">
+					Sets
+				</a>
+			</div>
+			<div id="contact">
+				<a href="/contactus">
+					Contact Us
+				</a>
+			</div>
+		</div>
+	</div>
+	<center>
+		<form method="post" action="/sets/<%= title %>">
+			Edit set title:<input type="text" name="textarea" class="title" value="<%= title %>"><%= title %></input>
+			<br>
+			Edit description:<input type="text" name="textarea"class="description" value="<%= description %>"><%= description %></input>
+			<br>
+			Edit video list:<input type="text" name="textarea" class="vidlist" value="bubba">
+				<%= vidlist %>
+			</input>
+			<input type="hidden" name="_method" value="put">
+			<button type="submit" name="button" class="button" value="Edit Set">
+		</form>
+	</center>	
+</body>

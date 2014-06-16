@@ -1,4 +1,4 @@
-<html>
+	<html>
 <head>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -33,7 +33,17 @@
 	</div>
 	<center>
 	<div class="video">
-		<iframe width="1000" height="563" src="//www.youtube.com/embed/<%= result %>" frameborder="0" allowfullscreen></iframe>
+		<%= vid_playlist %>
+	</div>
+	<div id="functions">
+		<form method="get" action="/sets/<%= title %>/edit">
+			<input type="submit" name="button" class="button" value="Edit Set">
+		</form>
+		<br>
+		<form method="post" action="/sets/<%= title %>">
+			<input type="hidden" name="_method" value="delete">
+			<button type="submit" name="button" class="button" value="Delete Set">
+		</form>
 	</div>
 	</center>	
 </body>

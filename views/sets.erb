@@ -23,12 +23,7 @@
 				<a href="/sets">
 					Sets
 				</a>
-				<ul>
-					<a href="/sets/previous">
-						Previous
-					</a>
-				</ul>
-			</div>
+				</div>
 			<div id="contact">
 				<a href="/contactus">
 					Contact Us
@@ -67,11 +62,9 @@
 		 	<tr>
 		 		<td><form method="get" action="/sets">
 					<input type="submit" name="button" class="button" value="<%= key %>"></form></td>
-		 		<td><%= value[value.length] %></td>
-		 		<td><% value.each do |vid| %>
-		 				<% if vid == value.length-2%>
-		 				<%= vid[value.length-2]%>
-		 				<% else %>
+		 		<td><%= value[value.length - 1] %></td>
+				<td><% value.each_with_index do |vid,i| %>
+		 				<% unless i >= value.length-1%>
 		 					<img class="thumbnail" src="http://img.youtube.com/vi/<%= vid %>/default.jpg">
 		 				<% end %>
 		 			<% end %>
