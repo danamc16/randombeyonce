@@ -30,6 +30,7 @@ end
 
 
 post '/sets' do
+	session[:history] ||= {}
 	vidlist = params[:vids].split(", ")
 	if params[:button] == "Submit"
 		combined = vidlist.push(params[:description])
@@ -43,7 +44,7 @@ get '/sets/:title' do
 	
 	insides = Marshal.load(Marshal.dump(session[:history][params[:title]]))
 	insides.pop
-	insides.shuffle
+	insides.shuffle!
 
 	@first_vid = ''
 	@rest_of_vids = ''
@@ -73,17 +74,29 @@ get '/sets/:title/edit' do
 	description = session[:history][title][(session[:history][title].length)-1]
 	vidlist = Marshal.load(Marshal.dump(session[:history][title]))
 	vidlist.pop
-	vidlist.join(', ')
-	binding.pry
+	string = ""
+	vidlist.each do |vid|
+		if vid == vidlist[0]
+			string = vid
+		else
+			string = string + ", " + vid
+		end
+	end
 
-	erb :edit, :locals => {:title => title, :description => description,:vidlist => vidlist}
+	erb :edit, :locals => {:title => title, :description => description,:vidlist => vidlist, :string => string}
 end
 
 put '/sets/:title/edit' do
+
 	title = params[:title]
+	title_new = params[:title_new]
+	session[:history][title_new] = session[:history].delete(title)
 	description = params[:description]
-	vidlist = params[:vidlist]
-	erb :edit, :locals => {:title => title,:description => description,:vidlist => vidlist}
+	vidlist = params[:vidlist].split(', ')
+	session[:history][title_new].replace(vidlist.push(description))
+	redirect to('/sets/' + title_new)
+	
+	erb :edit, :locals => {:title => params[:title],:title_new => params[:title_new],:description => params[:description],:vidlist => params[:vidlist]}
 end
 
 delete '/sets/:title' do
